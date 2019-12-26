@@ -1,0 +1,161 @@
+﻿<html>
+  <head>
+    <title>websocket sender</title>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/css/bootstrap.min.css" />
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.2/js/bootstrap.min.js"></script>
+    <script>
+      $(function() {
+        socket = new WebSocket("ws://192.168.43.117:10000/");
+        socket.onopen = function() {};
+        socket.onmessage = function(e) {
+          $("#msgbox").append($('<p>'+e.data+'</p>'));
+        };
+        $(window).on('keydown', function(e) {
+          if(e.keyCode === 37) { // ←
+            socket.send('52');
+          }
+          if(e.keyCode === 38) { // ↑
+            socket.send('50');
+          }
+          if(e.keyCode === 39) { // →
+            socket.send('54');
+          }
+          if(e.keyCode === 40) { // ↓
+            socket.send('56');
+          }
+          if(e.keyCode === 70) { // f fire!
+            socket.send('118');
+          }
+          if(e.keyCode === 87) { // w
+            socket.send('115');
+          }
+          if(e.keyCode === 65) { // a
+            socket.send('116');
+          }
+          if(e.keyCode === 90) { // z
+            socket.send('114');
+          }
+          if(e.keyCode === 68) { // d
+            socket.send('117');
+          }
+        });
+        $('#send').click(function(){
+          socket.send($('#msg').val());
+          $('#msg').val('');
+        });
+        $('#msg').keydown(function(e) {
+          if (e.keyCode == 13) {
+            socket.send($('#msg').val());
+            $('#msg').val('');
+          }
+        });
+        $('#forward').click(function(){
+          socket.send('56');
+        });
+        $('#left').click(function(){
+          socket.send('52');
+        });
+        $('#right').click(function(){
+          socket.send('54');
+        });
+        $('#backward').click(function(){
+          socket.send('50');
+        });
+        $('#brake').click(function(){
+          socket.send('53');
+        });
+        $('#up').click(function(){
+          socket.send('115');
+        });
+        $('#down').click(function(){
+          socket.send('114');
+        });
+        $('#turn_left').click(function(){
+          socket.send('116');
+        });
+        $('#turn_right').click(function(){
+          socket.send('117');
+        });
+        $('#camera_shot').click(function(){
+          socket.send('108');
+        });
+        $('#fire').click(function(){
+          socket.send('118');
+        });
+      });
+    </script>
+  </head>
+  <body>
+    <div class="container">
+      <div class="row">
+      <td width="300" height="120"><h1>Websocket Message sender</h1>
+      <h4>119 : white on    121 : yellow on</h4>
+      <h4>114 : servo motor1 left    115 : servo motor1 right</h4>
+      <h4>116 : servo motor2 down    117 : servo motor2 up</h4>
+      <h4>50 : forward      52 : right     54 : left         56 : backward     53 : brake</h4>
+      <h4>108 : camera shot   118 : fire   202 : stop</h4>
+      <div class="col">
+<iframe id="camerainlineFrame"
+    title="camerainlineFrame"
+    width="160"
+    height="120"
+    src="http://192.168.43.117:8080/?action=stream">
+</iframe>
+      </div>
+      <div class="row">
+        <div class="col-xs-5">
+          <div class="input-group">
+            <input id="msg" type="text" class="form-control" placeholder="put your message...">
+            <span class="input-group-btn">
+              <button id="send" class="btn btn-primary" type="button">Send</button>
+            </span>
+          </div>
+        </div>
+        <div class="col-xs-5">
+          <div class="moving-group">
+            <span class="moving-group">
+              <button id="forward" class="btn btn-primary" type="button">forward</button>
+              <button id="left" class="btn btn-primary" type="button">left</button>
+              <button id="right" class="btn btn-primary" type="button">right</button>
+              <button id="backward" class="btn btn-primary" type="button">backward</button>
+              <button id="brake" class="btn btn-primary" type="button">brake</button>
+            </span>
+          </div>
+        </div>
+        <div class="col-xs-5">
+          <div class="servo-group">
+            <span class="servo-group">
+              <button id="up" class="btn btn-primary" type="button">up</button>
+              <button id="turn_left" class="btn btn-primary" type="button">turn left</button>
+              <button id="turn_right" class="btn btn-primary" type="button">turn right</button>
+              <button id="down" class="btn btn-primary" type="button">down</button>
+            </span>
+          </div>
+        </div>
+        <div class="col-xs-5">
+          <div class="moving-group">
+            <span class="moving-group">
+              <button id="camera_shot" class="btn btn-primary" type="button">camera_shot</button>
+            </span>
+          </div>
+        </div>
+        <div class="col-xs-5">
+          <div class="moving-group">
+            <span class="moving-group">
+              <button id="fire" class="btn btn-primary" type="button">fire</button>
+            </span>
+          </div>
+        </div>
+        <div class="col-xs-7">
+          <div class="panel panel-primary">
+            <div class="panel-heading">
+              <h3 class="panel-title">Messages</h3>
+            </div>
+            <div id="msgbox" class="panel-body"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>
